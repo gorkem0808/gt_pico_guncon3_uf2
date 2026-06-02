@@ -57,3 +57,16 @@ Oyun içinde tam çalışması için sonraki sürümde GunCon3 key/checksum/enco
 ## Lisans notu
 
 Bu starter kodu test amaçlıdır. Gerçek GunCon3 encode algoritması eklenirken kaynak olarak Beardypig'in GPL-2.0 GunCon3 Linux sürücüsü incelenecektir. O koddan birebir algoritma veya tablo alınırsa proje GPL uyumlu tutulmalıdır.
+
+
+## V2 düzeltmesi
+
+Bu sürümde GitHub Actions tarafı güncellendi:
+
+- `actions/checkout@v5` kullanıldı.
+- `actions/upload-artifact@v6` kullanıldı.
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` eklendi.
+- CMake build sistemi Ninja ile çalışacak şekilde ayarlandı.
+- TinyUSB yapılandırmasında `CFG_TUSB_MCU`, `CFG_TUSB_OS` ve full-speed USB modu düzeltildi.
+
+Eğer build tekrar hata verirse GitHub Actions içinde kırmızı Build satırına girip `Build` adımındaki gerçek hata satırını kopyalayın. Node.js uyarısı tek başına hata değildir.

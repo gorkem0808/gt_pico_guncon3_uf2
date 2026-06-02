@@ -5,11 +5,17 @@
 extern "C" {
 #endif
 
+// Pico SDK bazen CFG_TUSB_MCU değerini dışarıdan vermez.
+// Bu yüzden RP2040/Pico için güvenli varsayılanı burada tanımlıyoruz.
 #ifndef CFG_TUSB_MCU
-#error CFG_TUSB_MCU must be defined by Pico SDK
+#define CFG_TUSB_MCU OPT_MCU_RP2040
 #endif
 
-#define CFG_TUSB_RHPORT0_MODE       (OPT_MODE_DEVICE)
+#ifndef CFG_TUSB_OS
+#define CFG_TUSB_OS OPT_OS_PICO
+#endif
+
+#define CFG_TUSB_RHPORT0_MODE       (OPT_MODE_DEVICE | OPT_MODE_FULL_SPEED)
 #define CFG_TUD_ENDPOINT0_SIZE      64
 
 #define CFG_TUD_CDC                 0
