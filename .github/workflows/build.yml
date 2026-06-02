@@ -1,0 +1,43 @@
+name: Build Pico UF2
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Projeyi al
+        uses: actions/checkout@v5
+
+      - name: ARM derleme araçlarını kur
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi git python3
+
+      - name: Pico SDK indir
+        run: |
+          git clone --depth 1 --recurse-submodules https://github.com/raspberrypi/pico-sdk.git pico-sdk
+          echo "PICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk" >> $GITHUB_ENV
+
+      - name: Ayarla
+        run: cmake -S . -B build -G Ninja -DPICO_BOARD=pico
+
+      - name: Derle
+        run: cmake --build build --verbose
+
+      - name: UF2 dosyasını kontrol et
+        run: |
+          ls -lah build || true
+          test -f build/gt_pico_guncon3.uf2
+
+      - name: UF2 çıktısını yükle
+        uses: actions/upload-artifact@v6
+        with:
+          name: gt_pico_guncon3_uf2
+          path: build/gt_pico_guncon3.uf2
