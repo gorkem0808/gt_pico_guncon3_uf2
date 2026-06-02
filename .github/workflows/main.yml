@@ -1,0 +1,35 @@
+name: Build Pico UF2
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install ARM build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi git python3
+
+      - name: Download Pico SDK
+        run: |
+          git clone --depth 1 --recurse-submodules https://github.com/raspberrypi/pico-sdk.git pico-sdk
+          echo "PICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk" >> $GITHUB_ENV
+
+      - name: Configure
+        run: cmake -S . -B build -DPICO_BOARD=pico
+
+      - name: Build
+        run: cmake --build build -j2
+
+      - name: Upload UF2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt_pico_guncon3_uf2
+          path: build/gt_pico_guncon3.uf2
